@@ -147,3 +147,29 @@ Responses MUST be a map of one or more HTTP status codes, and each response may 
               }
   
 ```
+## RESOURCE TYPES
+
+The "collection/collection-item" pattern
+
+```
+#%RAML 1.0
+  title:
+
+  /resources:
+    get:
+    post:
+    /{resourceId}:
+      get:
+
+```
+
+So, we found two different type of resources. The item (represented by an id), and the collection (containing all the items). It would be nice to be able to define these types, and declare the resources of those types. Luckily, there is a way to do this in RAML. Resource Types in RAML
+
+```
+resourceTypes:
+  collection:
+    get:
+    post:
+  collection-item:
+    get:
+```
