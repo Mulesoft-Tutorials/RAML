@@ -4,7 +4,7 @@ RESTful API Modeling Language (RAML) is a YAML-based language for describing RES
 
 # Structure of RAML
 
-  ## Enter the Root
+ ## Enter the Root
 ```
 #%RAML 1.0
 ---
@@ -12,6 +12,34 @@ title: e-comm API
 baseUri: http://localhost:9080/api/{version}
 version: v1
 ```
+## Security Scheme
+
+SecuritySchemas is an optional element in the RAML root. SecuritySchemas contains the definition of the security that would be used to secure the api and it its method. This element contains the name, description, type, describedBy, queryParameters.
+
+The securedBy attribute of RAML document root may be used to apply security schemes to every method of API. This specifies that all methods in the API (unless they have their own securedBy attribute) can be authenticated by any mentioned security scheme. Applying a security scheme to a method overrides whichever security scheme has been applied to the API as whole. To indicate that the method is protected using a specific security scheme, the method MUST be defined by using the securedBy attribute. The value assigned to the securedBy attribute MUST be a list of any of the security schemes previously defined in the securitySchemes property of RAML document root. To indicate that the method may be called without applying any security scheme, the method may be provided with securedBy attribute containing null as array component.
+
+```
+securedBy: basicAuth
+securitySchemes:
+  basicAuth:
+    description: Each request must contain the headers necessary for
+                 basic authentication
+    type: Basic Authentication
+    describedBy:
+      headers:
+        Authorization:
+          description: Used to send the Base64-encoded "username:password"
+                       credentials
+          type: string
+      responses:
+        401:
+          description: |
+            Unauthorized. Either the provided username and password
+            combination is invalid, or the user is not allowed to access
+            the content provided by the requested URL.
+```
+
+
 ## ENTER RESOURCES
 
 As a thoughtful API designer, it's important to consider how your API consumers will use your API. It's especially important because in many ways, as the API designer YOU control the consumption
@@ -83,6 +111,20 @@ Great job so far! Now, let's say you want your API to allow even more powerful o
 
 Responses MUST be a map of one or more HTTP status codes, and each response may include descriptions, examples, or schemas.
 
+Below are few http status codes which use it often
+  
+  * 200 - Success 
+  * 201 - Created
+  * 400 - Bad request
+  * 401 - Unauthorized
+  * 403 - Forbidden
+  * 404 - Not found
+  * 408 - Request Timedout
+  * 500 - Internal Server Error
+  * 502 - Bad Gateway
+  * 503 - Service Unavailable
+  * 504 - Gateway Timeout
+
 ```
 /customer
   get:
@@ -145,6 +187,20 @@ Responses MUST be a map of one or more HTTP status codes, and each response may 
                   }
                 ]
               }
+          400:
+            body:
+              application/json:
+                example:
+                  {
+                    "errorMessage": "Bad request"
+                  }
+          401:
+            body:
+              application/json:
+                example:
+                  {
+                    "errorMessage": "Unauthorized"
+                  }
   
 ```
 ## RESOURCE TYPES
@@ -173,3 +229,9 @@ resourceTypes:
   collection-item:
     get:
 ```
+### Reserved Parameters
+ 
+ Two reserved parameters may be used in resource type definitions:
+  * ```<<resourcePath>> represents the entire URI (following the baseURI), and```
+  * ```<<resourcePathName>> represents the part of the URI following the right-most forward slash (/), ignoring any braces { }.```
+ 
