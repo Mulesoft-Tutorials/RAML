@@ -1,0 +1,18 @@
+
+Let's create a RAML specification for Customers API with the following requirements:
+
+·       The API has a resource called customers.
+
+·       Add Corelation-ID as header. This header helps to uniquely identify the transactions.
+
+·       The customers resource has a GET method to retrieve all customer related informations
+
+·       The GET method for the customer resource has two optional string queryParameters firstName name and lastName. The name query parameter value is used to filter and return records for a particular customer.
+
+·       The GET method’s response data is an array of customer objects.
+
+·       The GET method for customer resource has uri parameter to search customer based on id.
+
+·       The /customer resource has a POST method that accepts an array of customer objects and response with 200 success message
+
+·       Each method should have a description.
